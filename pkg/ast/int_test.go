@@ -537,3 +537,14 @@ func TestI8Node_ProducedByFillValues(t *testing.T) {
 		assert.Equal(t, test.expectedString, fmt.Sprint(node))
 	}
 }
+
+func TestI8Node_FactoryMethodInputTypes(t *testing.T) {
+	node := NewIntNode(
+		8,
+		int(-16), int8(-8), int16(-4), int32(-2), int64(-1),
+		uint(0), uint8(1), uint16(2), uint32(4), uint64(8),
+	)
+
+	assert.Equal(t, 10, node.Size())
+	assert.Equal(t, "<I8[10] -16 -8 -4 -2 -1 0 1 2 4 8>", fmt.Sprint(node))
+}
