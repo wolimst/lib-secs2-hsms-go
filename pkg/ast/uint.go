@@ -113,16 +113,8 @@ func (node *UintNode) ToBytes() []byte {
 	}
 
 	for _, value := range node.values {
-		// Initialize mask; mask == 0xFF000000 when node.byteSize == 4
-		var mask uint64 = 0xFF << ((node.byteSize - 1) * 8)
-		for i := 0; i < node.byteSize; i++ {
-			// Calculate and append value's i-th byte
-			// e.g. given value == 0x01ABCDEF, node.ByteSize == 4,
-			//      ithByte == 0x01 when i == 0
-			//      ithByte == 0xAB when i == 1
-			var ithByte byte = byte((value & mask) >> ((node.byteSize - i - 1) * 8))
-			result = append(result, ithByte)
-			mask = mask >> 8
+		for i := node.byteSize - 1; i >= 0; i-- {
+			result = append(result, byte(value>>(i*8)))
 		}
 	}
 
