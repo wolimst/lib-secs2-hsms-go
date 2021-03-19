@@ -45,37 +45,36 @@ func NewFloatNode(byteSize int, values ...interface{}) ItemNode {
 	)
 
 	for i, value := range values {
-		switch value.(type) {
+		switch value := value.(type) {
 		case int:
-			nodeValues = append(nodeValues, float64(value.(int)))
+			nodeValues = append(nodeValues, float64(value))
 		case int8:
-			nodeValues = append(nodeValues, float64(value.(int8)))
+			nodeValues = append(nodeValues, float64(value))
 		case int16:
-			nodeValues = append(nodeValues, float64(value.(int16)))
+			nodeValues = append(nodeValues, float64(value))
 		case int32:
-			nodeValues = append(nodeValues, float64(value.(int32)))
+			nodeValues = append(nodeValues, float64(value))
 		case int64:
-			nodeValues = append(nodeValues, float64(value.(int64)))
+			nodeValues = append(nodeValues, float64(value))
 		case uint:
-			nodeValues = append(nodeValues, float64(value.(uint)))
+			nodeValues = append(nodeValues, float64(value))
 		case uint8:
-			nodeValues = append(nodeValues, float64(value.(uint8)))
+			nodeValues = append(nodeValues, float64(value))
 		case uint16:
-			nodeValues = append(nodeValues, float64(value.(uint16)))
+			nodeValues = append(nodeValues, float64(value))
 		case uint32:
-			nodeValues = append(nodeValues, float64(value.(uint32)))
+			nodeValues = append(nodeValues, float64(value))
 		case uint64:
-			nodeValues = append(nodeValues, float64(value.(uint64)))
+			nodeValues = append(nodeValues, float64(value))
 		case float32:
-			nodeValues = append(nodeValues, float64(value.(float32)))
+			nodeValues = append(nodeValues, float64(value))
 		case float64:
-			nodeValues = append(nodeValues, value.(float64))
+			nodeValues = append(nodeValues, value)
 		case string:
-			v := value.(string)
-			if _, ok := nodeVariables[v]; ok {
+			if _, ok := nodeVariables[value]; ok {
 				panic("duplicated variable name found")
 			}
-			nodeVariables[v] = i
+			nodeVariables[value] = i
 			nodeValues = append(nodeValues, 0)
 		default:
 			panic("input argument contains invalid type for FloatNode")
