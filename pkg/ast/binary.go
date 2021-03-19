@@ -47,8 +47,11 @@ func NewBinaryNode(values ...interface{}) ItemNode {
 				nodeValues = append(nodeValues, int(vAsInt64))
 			} else {
 				// value is a variable
-				nodeValues = append(nodeValues, 0)
+				if _, ok := nodeVariables[v]; ok {
+					panic("duplicated variable name found")
+				}
 				nodeVariables[v] = i
+				nodeValues = append(nodeValues, 0)
 			}
 		} else {
 			panic("input argument contains invalid type for BinaryNode")

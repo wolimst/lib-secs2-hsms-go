@@ -39,8 +39,11 @@ func NewBooleanNode(values ...interface{}) ItemNode {
 			nodeValues = append(nodeValues, v)
 		} else if v, ok := value.(string); ok {
 			// value is a variable
-			nodeValues = append(nodeValues, false)
+			if _, ok := nodeVariables[v]; ok {
+				panic("duplicated variable name found")
+			}
 			nodeVariables[v] = i
+			nodeValues = append(nodeValues, false)
 		} else {
 			panic("input argument contains invalid type for BooleanNode")
 		}

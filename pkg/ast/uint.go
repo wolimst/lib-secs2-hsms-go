@@ -61,8 +61,11 @@ func NewUintNode(byteSize int, values ...interface{}) ItemNode {
 			nodeValues = append(nodeValues, value.(uint64))
 		case string:
 			v := value.(string)
-			nodeValues = append(nodeValues, 0)
+			if _, ok := nodeVariables[v]; ok {
+				panic("duplicated variable name found")
+			}
 			nodeVariables[v] = i
+			nodeValues = append(nodeValues, 0)
 		default:
 			panic("input argument contains invalid type for UintNode")
 		}
