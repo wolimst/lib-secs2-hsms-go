@@ -7,7 +7,7 @@ import (
 )
 
 // BinaryNode is a immutable data type that represents a binary item in a SECS-II message.
-// Implements DataItemNode.
+// Implements ItemNode.
 type BinaryNode struct {
 	values    []int          // Array of binary values between [0, 255], represented as integers
 	variables map[string]int // Variable name and its position in the data array

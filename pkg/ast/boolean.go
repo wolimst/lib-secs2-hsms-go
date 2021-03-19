@@ -6,7 +6,7 @@ import (
 )
 
 // BinaryNode is a immutable data type that represents a binary data item in a SECS-II message.
-// Implements DataItemNode.
+// Implements ItemNode.
 type BooleanNode struct {
 	values    []bool         // Array of boolean values
 	variables map[string]int // Variable name and its position in the data array

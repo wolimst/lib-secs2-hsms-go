@@ -8,7 +8,7 @@ import (
 )
 
 // FloatNode is a immutable data type that represents a float in a SECS-II message.
-// Implements DataItemNode.
+// Implements ItemNode.
 //
 // Infinity and NaN are not supported.
 //

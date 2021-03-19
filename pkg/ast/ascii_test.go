@@ -13,7 +13,6 @@ import (
 // and test the result of public observer methods Size(), FillInStringLength(),
 // Variables(), ToBytes(), and String().
 //
-//
 // Partitions:
 //
 // When the node contains string literal

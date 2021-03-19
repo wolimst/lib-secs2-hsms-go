@@ -7,7 +7,7 @@ import (
 )
 
 // UintNode is a immutable data type that represents an unsigned integer in a SECS-II message.
-// Implements DataItemNode.
+// Implements ItemNode.
 type UintNode struct {
 	byteSize  int            // Byte size of the unsigned integers; should be either 1, 2, 4, or 8
 	values    []uint64       // Array of unsigned integers

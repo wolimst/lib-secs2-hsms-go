@@ -8,7 +8,7 @@ import (
 )
 
 // IntNode is a immutable data type that represents a integer in a SECS-II message.
-// Implements DataItemNode.
+// Implements ItemNode.
 type IntNode struct {
 	byteSize  int            // Byte size of the integers; should be either 1, 2, 4, or 8
 	values    []int64        // Array of integers
