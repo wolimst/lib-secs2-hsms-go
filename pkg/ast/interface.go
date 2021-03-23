@@ -13,8 +13,22 @@ const MAX_BYTE_SIZE = 1<<24 - 1
 // E.g., A boolean node should be able to represent a SECS-II data item of <BOOLEAN[3] T F varName>.
 //
 // A variable name could contain a string with alphanumerics and the underbar.
+// Also, ellipsis literal "..." is a special variable name that can be only used in ListNode,
+// which means repetition of elements in the ListNode before it.
 // A number cannot be the first letter of the variable name.
 // Each variable name in a data item node should be unique.
+//
+// A variable name also could contain characters that is like array index accessor
+// in most programming languages, at the end of its name, e.g. varName[0], varName[1], etc.
+// However, it doesn't mean that there's underlying array; in case of the example above,
+// varName[0] it self is the name of the variable, and varName would not exist when not specified.
+// It might be a source of some confusion, therefore, it is recommended to use
+// variable names with this array-like notation, only in ListNodes, when there are repeating elements.
+// ListNode containing variables with array-like notation would be created,
+// when filling values into a ListNode containing variables and ellipsis,
+// e.g. <L <A varName> ...> can be <L[2] <A varName[0]> <A varName[1]> >,
+// when the ellipsis is filled in with 1 (1 repetition).
+// For more detailed information, refer to the documentation of ListNode.
 //
 // There is a limit on the number of data values that a ItemNode can contain,
 // as specified in the SEMI Standard.
@@ -81,11 +95,14 @@ func (node emptyItemNode) String() string {
 
 // isValidVarName checks that the variable name is valid as specified in the interface document.
 func isValidVarName(name string) bool {
-	re := regexp.MustCompile(`^[A-Za-z_]\w*$`)
-	if !re.MatchString(name) {
-		return false
-	}
-	return true
+	re := regexp.MustCompile(`^[A-Za-z_]\w*(\[\d+\])*$`)
+	return re.MatchString(name)
+}
+
+// isEllipsis checks whether a variable is ellipsis or not.
+func isEllipsis(name string) bool {
+	re := regexp.MustCompile(`^\.{3}(\[\d+\])?$`)
+	return re.MatchString(name)
 }
 
 // getVariableNames returns variable names sorted by their positions.
