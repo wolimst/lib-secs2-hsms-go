@@ -68,16 +68,27 @@ func (node *BooleanNode) Variables() []string {
 
 // FillValues implements ItemNode.FillValues().
 func (node *BooleanNode) FillValues(values map[string]interface{}) ItemNode {
+	if len(node.variables) == 0 {
+		return node
+	}
+
 	nodeValues := make([]interface{}, 0, node.Size())
 	for _, v := range node.values {
 		nodeValues = append(nodeValues, v)
 	}
+
+	createNew := false
 	for name, pos := range node.variables {
 		if v, ok := values[name]; ok {
 			nodeValues[pos] = v
+			createNew = true
 		} else {
 			nodeValues[pos] = name
 		}
+	}
+
+	if !createNew {
+		return node
 	}
 	return NewBooleanNode(nodeValues...)
 }
