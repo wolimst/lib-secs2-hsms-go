@@ -84,11 +84,11 @@ func TestF4Node_ProducedByFactoryMethod(t *testing.T) {
 	}
 }
 
-func TestF4Node_ProducedByFillValues(t *testing.T) {
+func TestF4Node_ProducedByFillVariables(t *testing.T) {
 	var tests = []struct {
 		description       string                 // Test case description
 		input             []interface{}          // Input to the factory method
-		fillInValues      map[string]interface{} // Input to the FillValues()
+		fillInValues      map[string]interface{} // Input to the FillVariables()
 		expectedSize      int                    // expected result from Size()
 		expectedVariables []string               // expected result from Variables()
 		expectedToBytes   []byte                 // expected result from ToBytes()
@@ -155,7 +155,7 @@ func TestF4Node_ProducedByFillValues(t *testing.T) {
 	}
 	for i, test := range tests {
 		t.Logf("Test #%d: %s", i, test.description)
-		node := NewFloatNode(4, test.input...).FillValues(test.fillInValues)
+		node := NewFloatNode(4, test.input...).FillVariables(test.fillInValues)
 		assert.Equal(t, test.expectedSize, node.Size())
 		assert.Equal(t, test.expectedVariables, node.Variables())
 		assert.Equal(t, test.expectedToBytes, node.ToBytes())
@@ -235,11 +235,11 @@ func TestF8Node_ProducedByFactoryMethod(t *testing.T) {
 	}
 }
 
-func TestF8Node_ProducedByFillValues(t *testing.T) {
+func TestF8Node_ProducedByFillVariables(t *testing.T) {
 	var tests = []struct {
 		description       string                 // Test case description
 		input             []interface{}          // Input to the factory method
-		fillInValues      map[string]interface{} // Input to the FillValues()
+		fillInValues      map[string]interface{} // Input to the FillVariables()
 		expectedSize      int                    // expected result from Size()
 		expectedVariables []string               // expected result from Variables()
 		expectedToBytes   []byte                 // expected result from ToBytes()
@@ -307,7 +307,7 @@ func TestF8Node_ProducedByFillValues(t *testing.T) {
 	}
 	for i, test := range tests {
 		t.Logf("Test #%d: %s", i, test.description)
-		node := NewFloatNode(8, test.input...).FillValues(test.fillInValues)
+		node := NewFloatNode(8, test.input...).FillVariables(test.fillInValues)
 		assert.Equal(t, test.expectedSize, node.Size())
 		assert.Equal(t, test.expectedVariables, node.Variables())
 		assert.Equal(t, test.expectedToBytes, node.ToBytes())

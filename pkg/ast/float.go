@@ -98,8 +98,8 @@ func (node *FloatNode) Variables() []string {
 	return getVariableNames(node.variables)
 }
 
-// FillValues implements ItemNode.FillValues().
-func (node *FloatNode) FillValues(values map[string]interface{}) ItemNode {
+// FillVariables implements ItemNode.FillVariables().
+func (node *FloatNode) FillVariables(values map[string]interface{}) ItemNode {
 	if len(node.variables) == 0 {
 		return node
 	}

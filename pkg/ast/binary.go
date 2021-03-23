@@ -75,8 +75,8 @@ func (node *BinaryNode) Variables() []string {
 	return getVariableNames(node.variables)
 }
 
-// FillValues implements ItemNode.FillValues().
-func (node *BinaryNode) FillValues(values map[string]interface{}) ItemNode {
+// FillVariables implements ItemNode.FillVariables().
+func (node *BinaryNode) FillVariables(values map[string]interface{}) ItemNode {
 	if len(node.variables) == 0 {
 		return node
 	}

@@ -10,7 +10,7 @@ import (
 // Testing Strategy:
 //
 // Refer to interface.go
-// Variables(), FillValues(), ToBytes(), String() should run recursively.
+// Variables(), FillVariables(), ToBytes(), String() should run recursively.
 //
 // Partitions:
 //
@@ -202,11 +202,11 @@ func TestListNode_ProducedByFactoryMethod(t *testing.T) {
 	}
 }
 
-func TestListNode_ProducedByFillValues(t *testing.T) {
+func TestListNode_ProducedByFillVariables(t *testing.T) {
 	var tests = []struct {
 		description       string                 // Test case description
 		input             []interface{}          // Input to the factory method
-		inputFillInValues map[string]interface{} // Input to FillValues()
+		inputFillInValues map[string]interface{} // Input to FillVariables()
 		expectedSize      int                    // expected result from Size()
 		expectedVariables []string               // expected result from Variables()
 		expectedToBytes   []byte                 // expected result from ToBytes()
@@ -596,7 +596,7 @@ func TestListNode_ProducedByFillValues(t *testing.T) {
 	}
 	for i, test := range tests {
 		t.Logf("Test #%d: %s", i, test.description)
-		node := NewListNode(test.input...).FillValues(test.inputFillInValues)
+		node := NewListNode(test.input...).FillVariables(test.inputFillInValues)
 		assert.Equal(t, test.expectedSize, node.Size())
 		assert.Equal(t, test.expectedVariables, node.Variables())
 		assert.Equal(t, test.expectedToBytes, node.ToBytes())

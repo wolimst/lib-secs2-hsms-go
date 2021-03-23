@@ -107,8 +107,8 @@ func (node *ListNode) Variables() []string {
 	return result
 }
 
-// FillValues implements ItemNode.FillValues().
-func (node *ListNode) FillValues(values map[string]interface{}) ItemNode {
+// FillVariables implements ItemNode.FillVariables().
+func (node *ListNode) FillVariables(values map[string]interface{}) ItemNode {
 	ellipsisValues, otherValues := node.splitValues(values)
 
 	// Fill in ellipsis
@@ -121,7 +121,7 @@ func (node *ListNode) FillValues(values map[string]interface{}) ItemNode {
 	// Fill in non-ellipsis variables with specified values
 	nodeValues := make([]interface{}, 0, nodeEllipsisFilled.Size())
 	for _, item := range nodeEllipsisFilled.values {
-		nodeValues = append(nodeValues, item.FillValues(otherValues))
+		nodeValues = append(nodeValues, item.FillVariables(otherValues))
 	}
 	for name, pos := range nodeEllipsisFilled.variables {
 		if v, ok := otherValues[name]; ok {
@@ -367,7 +367,7 @@ func (node *ListNode) fillEllipsis(values map[string]interface{}, state *fillSta
 				for _, v := range variables {
 					fill[v] = state.getNewVariableName(v)
 				}
-				nodeValues = append(nodeValues, item.FillValues(fill))
+				nodeValues = append(nodeValues, item.FillVariables(fill))
 			}
 		}
 	}

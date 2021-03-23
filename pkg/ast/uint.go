@@ -87,8 +87,8 @@ func (node *UintNode) Variables() []string {
 	return getVariableNames(node.variables)
 }
 
-// FillValues implements ItemNode.FillValues().
-func (node *UintNode) FillValues(values map[string]interface{}) ItemNode {
+// FillVariables implements ItemNode.FillVariables().
+func (node *UintNode) FillVariables(values map[string]interface{}) ItemNode {
 	if len(node.variables) == 0 {
 		return node
 	}

@@ -98,11 +98,11 @@ func (node *ASCIINode) Variables() []string {
 	return []string{node.variable.name}
 }
 
-// FillValues implements ItemNode.FillValues().
+// FillVariables implements ItemNode.FillVariables().
 //
 // The fill-in value must be acceptable by the NewASCIINode factory method, and
 // it should be in range of the fill-in string length.
-func (node *ASCIINode) FillValues(values map[string]interface{}) ItemNode {
+func (node *ASCIINode) FillVariables(values map[string]interface{}) ItemNode {
 	if node.isValue {
 		return node
 	}

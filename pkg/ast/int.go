@@ -91,8 +91,8 @@ func (node *IntNode) Variables() []string {
 	return getVariableNames(node.variables)
 }
 
-// FillValues implements ItemNode.FillValues().
-func (node *IntNode) FillValues(values map[string]interface{}) ItemNode {
+// FillVariables implements ItemNode.FillVariables().
+func (node *IntNode) FillVariables(values map[string]interface{}) ItemNode {
 	if len(node.variables) == 0 {
 		return node
 	}

@@ -6,7 +6,7 @@ package ast
 //
 // Testing Strategy:
 //
-// For each implementation, create a new instance using the factory method or FillValues(),
+// For each implementation, create a new instance using the factory method or FillVariables(),
 // and test the result of public observer methods Size(), Variables(), ToBytes(), and String().
 //
 // Partitions:

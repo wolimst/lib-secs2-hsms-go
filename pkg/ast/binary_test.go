@@ -71,11 +71,11 @@ func TestBinaryNode_ProducedByFactoryMethod(t *testing.T) {
 	}
 }
 
-func TestBinaryNode_ProducedByFillValues(t *testing.T) {
+func TestBinaryNode_ProducedByFillVariables(t *testing.T) {
 	var tests = []struct {
 		description       string                 // Test case description
 		input             []interface{}          // Input to the factory method
-		fillInValues      map[string]interface{} // Input to the FillValues()
+		fillInValues      map[string]interface{} // Input to the FillVariables()
 		expectedSize      int                    // expected result from Size()
 		expectedVariables []string               // expected result from Variables()
 		expectedToBytes   []byte                 // expected result from ToBytes()
@@ -138,7 +138,7 @@ func TestBinaryNode_ProducedByFillValues(t *testing.T) {
 	}
 	for i, test := range tests {
 		t.Logf("Test #%d: %s", i, test.description)
-		node := NewBinaryNode(test.input...).FillValues(test.fillInValues)
+		node := NewBinaryNode(test.input...).FillVariables(test.fillInValues)
 		assert.Equal(t, test.expectedSize, node.Size())
 		assert.Equal(t, test.expectedVariables, node.Variables())
 		assert.Equal(t, test.expectedToBytes, node.ToBytes())

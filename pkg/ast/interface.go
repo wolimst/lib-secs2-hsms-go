@@ -42,19 +42,14 @@ type ItemNode interface {
 	// Variables returns the variable names in the node, in the insertion order.
 	Variables() []string
 
-	// FillValues returns a new ItemNode with the specified values filled into the variables.
+	// FillVariables returns a new ItemNode with the specified values filled into the variables.
 	// The map input argument has variable name as its key, and fill-in value as its value.
 	// Each fill-in value must be acceptable by the ItemNode's factory method.
 	// If a variable in the ItemNode doesn't exist in the input map, the variable will remain unchanged.
-	FillValues(map[string]interface{}) ItemNode
+	FillVariables(map[string]interface{}) ItemNode
 
 	// ToBytes returns the byte representation of the data item.
 	ToBytes() []byte
-}
-
-type variable struct {
-	name string // The name of the variable
-	pos  int    // The position of the variable in the data item's array
 }
 
 // EmptyItemNode is a immutable data type that represents a empty data item node.
@@ -76,8 +71,8 @@ func (node emptyItemNode) Variables() []string {
 	return []string{}
 }
 
-// FillValues implements ItemNode.FillValues().
-func (node emptyItemNode) FillValues(values map[string]interface{}) ItemNode {
+// FillVariables implements ItemNode.FillVariables().
+func (node emptyItemNode) FillVariables(values map[string]interface{}) ItemNode {
 	return node
 }
 

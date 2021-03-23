@@ -9,7 +9,7 @@ import (
 
 // Testing Strategy:
 //
-// Create a new instance using the factory methods or FillValues(),
+// Create a new instance using the factory methods or FillVariables(),
 // and test the result of public observer methods Size(), FillInStringLength(),
 // Variables(), ToBytes(), and String().
 //
@@ -217,11 +217,11 @@ func TestASCIINode_Variable_ProducedByFactoryMethod(t *testing.T) {
 	}
 }
 
-func TestASCIINode_Variable_ProducedByFillValues(t *testing.T) {
+func TestASCIINode_Variable_ProducedByFillVariables(t *testing.T) {
 	var tests = []struct {
 		description             string                 // Test case description
 		input                   []interface{}          // Inputs to the factory method (name, minLength, maxLength)
-		inputFillInValues       map[string]interface{} // Input to the FillValues()
+		inputFillInValues       map[string]interface{} // Input to the FillVariables()
 		expectedSize            int                    // expected result from Size()
 		expectedFillInStrLenMin int                    // expected result of min from FillInStringLength()
 		expectedFillInStrLenMax int                    // expected result of max from FillInStringLength()
@@ -343,7 +343,7 @@ func TestASCIINode_Variable_ProducedByFillValues(t *testing.T) {
 	for i, test := range tests {
 		t.Logf("Test #%d: %s", i, test.description)
 		node := NewASCIINodeVariable(test.input[0].(string), test.input[1].(int), test.input[2].(int))
-		node = node.FillValues(test.inputFillInValues)
+		node = node.FillVariables(test.inputFillInValues)
 		min, max := node.(*ASCIINode).FillInStringLength()
 
 		assert.Equal(t, test.expectedSize, node.Size())
