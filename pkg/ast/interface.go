@@ -170,9 +170,9 @@ func getHeaderBytes(typ string, size int) ([]byte, error) {
 	}
 
 	lengthBytes := []byte{
-		byte(dataByteLength & 0xFF0000 >> 16),
-		byte(dataByteLength & 0x00FF00 >> 8),
-		byte(dataByteLength & 0x0000FF),
+		byte(dataByteLength >> 16),
+		byte(dataByteLength >> 8),
+		byte(dataByteLength),
 	}
 
 	if lengthBytes[0] == 0 {
