@@ -15,12 +15,12 @@ import (
 //
 // No messages is returned if error exist in the input.
 // errors and warnings have format of "Ln x, Col y: error text".
-func Parse(input string) (messages []*ast.MessageNode, errors, warnings []string) {
+func Parse(input string) (messages []*ast.DataMessage, errors, warnings []string) {
 	p := &parser{
 		input:      input,
 		lexer:      lex(input),
 		tokenQueue: []token{},
-		messages:   []*ast.MessageNode{},
+		messages:   []*ast.DataMessage{},
 		errors:     []parseError{},
 		warnings:   []parseError{},
 	}
@@ -41,7 +41,7 @@ func Parse(input string) (messages []*ast.MessageNode, errors, warnings []string
 	}
 
 	if len(errors) > 0 {
-		return []*ast.MessageNode{}, errors, warnings
+		return []*ast.DataMessage{}, errors, warnings
 	}
 	return p.messages, errors, warnings
 }
@@ -52,7 +52,7 @@ type parser struct {
 	tokenQueue    []token            // token queue that the lexer tokenized
 	variableNames map[string]bool    // variable names in a message to check duplicates
 	ellipsisCount int                // ellipsis count in a message
-	messages      []*ast.MessageNode // parsed messages
+	messages      []*ast.DataMessage // parsed messages
 	errors        []parseError       // parsing errors
 	warnings      []parseError       // parsing warnings
 }
@@ -164,7 +164,7 @@ func (p *parser) parseMessage() (ok bool) {
 		return false
 	}
 
-	message := ast.NewMessageNode(msgName, stream, function, waitBit, direction, dataItem)
+	message := ast.NewDataMessage(msgName, stream, function, waitBit, direction, dataItem)
 	p.messages = append(p.messages, message)
 	return true
 }
