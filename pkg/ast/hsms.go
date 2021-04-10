@@ -13,7 +13,31 @@ const (
 	sTypeSeparateReq = 9
 )
 
+// HSMSMessage is a interface of immutable data types that represents a HSMS message.
+//
+// HSMSMessage contains two implementations, DataMessage and ControlMessage.
+//
+// DataMessage represents a SECS-II data message. Note that, some DataMessage
+// might not be converted to HSMS format, i.e. its wait bit is in optional state,
+// it's data item contain variables, or session id and system bytes are not set.
+// Only a complete DataMessage, i.e. wait bit is true or false, no variables in data item,
+// session id and system bytes are set, can be converted to HSMS format, and thus
+// can be sent to the recipient.
+//
+// ControlMessage can represent one of select.req, select.rsp, deselect.req, deselect.rsp,
+// linktest.req, linktest.rsp, reject.req, separate.req, and undefined control message.
+type HSMSMessage interface {
+	// Type returns HSMS message type.
+	// Return will be one of "data message", "select.req", "select.rsp", "deselect.req", "deselect.rsp",
+	// "linktest.req", "linktest.rsp", "reject.req", "separate.req", "undefined".
+	Type() string
+
+	// ToBytes returns byte representation of the HSMS message.
+	ToBytes() []byte
+}
+
 // ControlMessage is a immutable data type that represents a HSMS control message.
+// Implements HSMSMessage.
 type ControlMessage struct {
 	header []byte
 	// Rep invariants
@@ -23,9 +47,22 @@ type ControlMessage struct {
 	// - header should not be exposed
 }
 
+// NewHSMSControlMessage creates HSMS control message from header bytes.
+// header bytes should have appropriate values as specified in HSMS specification.
+func NewHSMSControlMessage(header []byte) HSMSMessage {
+	headerCopy := make([]byte, 10)
+	for i, b := range header {
+		if i > 10 {
+			break
+		}
+		headerCopy[i] = b
+	}
+	return &ControlMessage{headerCopy}
+}
+
 // NewHSMSMessageSelectReq creates HSMS Select.req control message.
 // systemBytes should have length of 4.
-func NewHSMSMessageSelectReq(sessionID uint16, systemBytes []byte) *ControlMessage {
+func NewHSMSMessageSelectReq(sessionID uint16, systemBytes []byte) HSMSMessage {
 	header := make([]byte, 10)
 	header[0] = byte(sessionID >> 8)
 	header[1] = byte(sessionID)
@@ -44,27 +81,28 @@ func NewHSMSMessageSelectReq(sessionID uint16, systemBytes []byte) *ControlMessa
 // 2 means that communication is not ready,
 // 3 means that connection that TCP/IP port is exhausted,
 // 4-255 are reserved failure reason codes.
-func NewHSMSMessageSelectRsp(selectReq *ControlMessage, selectStatus byte) *ControlMessage {
+func NewHSMSMessageSelectRsp(selectReq HSMSMessage, selectStatus byte) HSMSMessage {
 	if selectReq.Type() != "select.req" {
 		panic("expected select.req message")
 	}
 
 	header := make([]byte, 10)
-	header[0] = selectReq.header[0]
-	header[1] = selectReq.header[1]
+	msg, _ := selectReq.(*ControlMessage)
+	header[0] = msg.header[0]
+	header[1] = msg.header[1]
 	header[3] = selectStatus
 	header[5] = sTypeSelectRsp
-	header[6] = selectReq.header[6]
-	header[7] = selectReq.header[7]
-	header[8] = selectReq.header[8]
-	header[9] = selectReq.header[9]
+	header[6] = msg.header[6]
+	header[7] = msg.header[7]
+	header[8] = msg.header[8]
+	header[9] = msg.header[9]
 
 	return &ControlMessage{header}
 }
 
 // NewHSMSMessageDeselectReq creates HSMS Deselect.req control message.
 // systemBytes should have length of 4.
-func NewHSMSMessageDeselectReq(sessionID uint16, systemBytes []byte) *ControlMessage {
+func NewHSMSMessageDeselectReq(sessionID uint16, systemBytes []byte) HSMSMessage {
 	header := make([]byte, 10)
 	header[0] = byte(sessionID >> 8)
 	header[1] = byte(sessionID)
@@ -82,27 +120,28 @@ func NewHSMSMessageDeselectReq(sessionID uint16, systemBytes []byte) *ControlMes
 // 1 means that communication is not yet established,
 // 2 means that communication is busy and cannot yet be relinquished,
 // 3-255 are reserved failure reason codes.
-func NewHSMSMessageDeselectRsp(deselectReq *ControlMessage, deselectStatus byte) *ControlMessage {
+func NewHSMSMessageDeselectRsp(deselectReq HSMSMessage, deselectStatus byte) HSMSMessage {
 	if deselectReq.Type() != "deselect.req" {
 		panic("expected deselect.req message")
 	}
 
 	header := make([]byte, 10)
-	header[0] = deselectReq.header[0]
-	header[1] = deselectReq.header[1]
+	msg, _ := deselectReq.(*ControlMessage)
+	header[0] = msg.header[0]
+	header[1] = msg.header[1]
 	header[3] = deselectStatus
 	header[5] = sTypeDeselectRsp
-	header[6] = deselectReq.header[6]
-	header[7] = deselectReq.header[7]
-	header[8] = deselectReq.header[8]
-	header[9] = deselectReq.header[9]
+	header[6] = msg.header[6]
+	header[7] = msg.header[7]
+	header[8] = msg.header[8]
+	header[9] = msg.header[9]
 
 	return &ControlMessage{header}
 }
 
 // NewHSMSMessageLinktestReq creates HSMS Linktest.req control message.
 // systemBytes should have length of 4.
-func NewHSMSMessageLinktestReq(systemBytes []byte) *ControlMessage {
+func NewHSMSMessageLinktestReq(systemBytes []byte) HSMSMessage {
 	header := make([]byte, 10)
 	header[0] = 0xFF
 	header[1] = 0xFF
@@ -116,19 +155,20 @@ func NewHSMSMessageLinktestReq(systemBytes []byte) *ControlMessage {
 }
 
 // NewHSMSMessageLinktestRsp creates HSMS Linktest.rsp control message from Linktest.req message.
-func NewHSMSMessageLinktestRsp(linktestReq *ControlMessage) *ControlMessage {
+func NewHSMSMessageLinktestRsp(linktestReq HSMSMessage) HSMSMessage {
 	if linktestReq.Type() != "linktest.req" {
 		panic("expected linktest.req message")
 	}
 
 	header := make([]byte, 10)
+	msg, _ := linktestReq.(*ControlMessage)
 	header[0] = 0xFF
 	header[1] = 0xFF
 	header[5] = sTypeLinktestRsp
-	header[6] = linktestReq.header[6]
-	header[7] = linktestReq.header[7]
-	header[8] = linktestReq.header[8]
-	header[9] = linktestReq.header[9]
+	header[6] = msg.header[6]
+	header[7] = msg.header[7]
+	header[8] = msg.header[8]
+	header[9] = msg.header[9]
 
 	return &ControlMessage{header}
 }
@@ -144,7 +184,7 @@ func NewHSMSMessageLinktestRsp(linktestReq *ControlMessage) *ControlMessage {
 // 3 means that transaction is not open, i.e. response message was received without request,
 // 4 means that data message is received in non-SELECTED state,
 // 5-255 are reserved reason codes.
-func NewHSMSMessageRejectReq(sessionID uint16, pType, sType byte, systemBytes []byte, reasonCode byte) *ControlMessage {
+func NewHSMSMessageRejectReq(sessionID uint16, pType, sType byte, systemBytes []byte, reasonCode byte) HSMSMessage {
 	header := make([]byte, 10)
 	header[0] = byte(sessionID >> 8)
 	header[1] = byte(sessionID)
@@ -165,7 +205,7 @@ func NewHSMSMessageRejectReq(sessionID uint16, pType, sType byte, systemBytes []
 
 // NewHSMSMessageSeparateReq creates HSMS Separate.req control message.
 // systemBytes should have length of 4.
-func NewHSMSMessageSeparateReq(sessionID uint16, systemBytes []byte) *ControlMessage {
+func NewHSMSMessageSeparateReq(sessionID uint16, systemBytes []byte) HSMSMessage {
 	header := make([]byte, 10)
 	header[0] = byte(sessionID >> 8)
 	header[1] = byte(sessionID)
@@ -180,8 +220,12 @@ func NewHSMSMessageSeparateReq(sessionID uint16, systemBytes []byte) *ControlMes
 
 // Type returns the message type of the HSMS control message.
 // Return will be one of "select.req", "select.rsp", "deselect.req", "deselect.rsp",
-// "linktest.req", "linktest.rsp", "reject.req", "separate.req", "unknown".
+// "linktest.req", "linktest.rsp", "reject.req", "separate.req", "undefined".
 func (msg *ControlMessage) Type() string {
+	if msg.header[4] != 0 {
+		return "undefined"
+	}
+
 	switch msg.header[5] {
 	case 1:
 		return "select.req"
@@ -200,7 +244,7 @@ func (msg *ControlMessage) Type() string {
 	case 9:
 		return "separate.req"
 	default:
-		return "unknown"
+		return "undefined"
 	}
 }
 

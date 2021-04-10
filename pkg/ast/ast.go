@@ -8,6 +8,7 @@ import (
 )
 
 // DataMessage is a immutable data type that represents a SECS-II message.
+// Implements HSMSMessage.
 type DataMessage struct {
 	name        string   // message name; should not contain whitespaces
 	stream      int      // should be in range of [0, 128)
@@ -277,11 +278,19 @@ func (node *DataMessage) FillVariables(values map[string]interface{}) *DataMessa
 	return message
 }
 
-// ToBytes returns the HSMS representation of the SECS-II message.
+// Type returns HSMS message type.
+// Implements HSMSMessage.Type().
+func (node *DataMessage) Type() string {
+	return "data message"
+}
+
+// ToBytes returns the HSMS byte representation of the SECS-II message.
 //
 // It will return empty byte slice if the message can't be represented as HSMS format,
 // i.e. wait bit is optional, the data item contains variable, or
 // session id and message bytes are not set.
+//
+// Implements HSMSMessage.ToBytes().
 func (node *DataMessage) ToBytes() []byte {
 	if node.WaitBit() == "optional" || len(node.Variables()) != 0 || node.sessionID == -1 {
 		return []byte{}

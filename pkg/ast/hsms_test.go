@@ -21,6 +21,12 @@ import (
 // - reject reasonCode: 1, 2, 3, 4
 // - reject pType, sType: no partition
 
+func TestHSMSControlMessage(t *testing.T) {
+	msg := NewHSMSControlMessage([]byte{1, 2, 0, 0, 0, 1, 0, 1, 2, 3})
+	assert.Equal(t, "select.req", msg.Type())
+	assert.Equal(t, []byte{0, 0, 0, 10, 1, 2, 0, 0, 0, 1, 0, 1, 2, 3}, msg.ToBytes())
+}
+
 func TestHSMSControlMessage_SelectReqRsp(t *testing.T) {
 	req1 := NewHSMSMessageSelectReq(0, []byte{0, 0, 0, 0})
 	assert.Equal(t, "select.req", req1.Type())
