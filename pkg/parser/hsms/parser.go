@@ -1,4 +1,4 @@
-package parser
+package hsms
 
 import (
 	"encoding/binary"
