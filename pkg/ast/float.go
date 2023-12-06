@@ -93,6 +93,14 @@ func (node *FloatNode) Size() int {
 	return len(node.values)
 }
 
+func (node *FloatNode) Type() string {
+	return "float"
+}
+
+func (node *FloatNode) Value() []float64 {
+	return node.values
+}
+
 // Variables implements ItemNode.Variables().
 func (node *FloatNode) Variables() []string {
 	return getVariableNames(node.variables)

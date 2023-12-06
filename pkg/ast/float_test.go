@@ -333,3 +333,10 @@ func TestF8Node_FactoryMethodInputTypes(t *testing.T) {
 		fmt.Sprint(node),
 	)
 }
+
+func TestFloatTypeAndValue(t *testing.T){
+	node := NewFloatNode(4, 123)
+	nd := node.(*FloatNode)
+	assert.Equal(t, nd.Type(), "float")
+	assert.Equal(t, nd.Value(), []float64{123})
+}

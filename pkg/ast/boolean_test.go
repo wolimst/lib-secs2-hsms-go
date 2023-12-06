@@ -145,3 +145,11 @@ func TestBooleanNode_ProducedByFillVariables(t *testing.T) {
 		assert.Equal(t, test.expectedString, fmt.Sprint(node))
 	}
 }
+
+
+func TestBooleanTypeAndValue(t *testing.T){
+	node := NewBooleanNode(true, false)
+	nd := node.(*BooleanNode)
+	assert.Equal(t, nd.Type(), "boolean")
+	assert.Equal(t, nd.Value(), []bool{true, false})
+}

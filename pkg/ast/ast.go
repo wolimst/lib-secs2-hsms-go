@@ -127,6 +127,10 @@ func NewHSMSDataMessage(name string, stream int, function int, waitBit int, dire
 
 // Public methods
 
+func (node *DataMessage) Body() ItemNode{
+	return node.dataItem
+}
+
 // Name returns the name of the SECS-II message.
 func (node *DataMessage) Name() string {
 	return node.name

@@ -78,6 +78,14 @@ func (node *ASCIINode) Size() int {
 	return len(node.value)
 }
 
+func (node *ASCIINode) Type() string{
+	return "ascii"
+}
+
+func (node *ASCIINode) Value() string {
+	return node.value
+}
+
 // FillInStringLength returns the minimun and the maximum string length that can be
 // filled into the variable of this ASCIINode.
 //

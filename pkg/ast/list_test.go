@@ -603,3 +603,11 @@ func TestListNode_ProducedByFillVariables(t *testing.T) {
 		assert.Equal(t, test.expectedString, fmt.Sprint(node))
 	}
 }
+
+
+func TestListTypeAndValue(t *testing.T){
+	node := NewListNode(NewIntNode(1, 11), NewASCIINode("hello"))
+	nd := node.(*ListNode)
+	assert.Equal(t, nd.Type(), "list")
+	assert.Equal(t, len(nd.Value()), 2)
+}

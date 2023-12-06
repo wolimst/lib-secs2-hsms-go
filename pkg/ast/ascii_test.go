@@ -354,3 +354,10 @@ func TestASCIINode_Variable_ProducedByFillVariables(t *testing.T) {
 		assert.Equal(t, test.expectedString, fmt.Sprint(node))
 	}
 }
+
+func TestAsciiTypeAndValue(t *testing.T){
+	node := NewASCIINode("hello world")
+	nd := node.(*ASCIINode)
+	assert.Equal(t, nd.Type(), "ascii")
+	assert.Equal(t, nd.Value(), "hello world")
+}

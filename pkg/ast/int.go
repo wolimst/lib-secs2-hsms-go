@@ -86,6 +86,14 @@ func (node *IntNode) Size() int {
 	return len(node.values)
 }
 
+func (node *IntNode) Type() string {
+	return "int"
+}
+
+func (node *IntNode) Value() []int64 {
+	return node.values
+}
+
 // Variables implements ItemNode.Variables().
 func (node *IntNode) Variables() []string {
 	return getVariableNames(node.variables)

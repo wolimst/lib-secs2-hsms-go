@@ -548,3 +548,10 @@ func TestU8Node_FactoryMethodInputTypes(t *testing.T) {
 	assert.Equal(t, 10, node.Size())
 	assert.Equal(t, "<U8[10] 0 1 2 4 8 16 32 64 128 256>", fmt.Sprint(node))
 }
+
+func TestUintTypeAndValue(t *testing.T){
+	node := NewUintNode(4, 123, 23, 1)
+	nd := node.(*UintNode)
+	assert.Equal(t, nd.Type(), "uint")
+	assert.Equal(t, nd.Value(), []uint64{123, 23, 1})
+}

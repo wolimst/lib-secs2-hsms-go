@@ -548,3 +548,10 @@ func TestI8Node_FactoryMethodInputTypes(t *testing.T) {
 	assert.Equal(t, 10, node.Size())
 	assert.Equal(t, "<I8[10] -16 -8 -4 -2 -1 0 1 2 4 8>", fmt.Sprint(node))
 }
+
+func TestIntTypeAndValue(t *testing.T){
+	node := NewIntNode(1, 123)
+	nd := node.(*IntNode)
+	assert.Equal(t, nd.Type(), "int")
+	assert.Equal(t, nd.Value(), []int64{123})
+}
