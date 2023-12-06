@@ -327,3 +327,63 @@ func TestMessageNode_ProducedByProducerMethods(t *testing.T) {
 		assert.Equal(t, test.expectedString, fmt.Sprint(msg))
 	}
 }
+
+func TestGetBody(t *testing.T) {
+	var tests = []struct {
+		description       string                 // Test case description
+		inputMessageName  string                 // Input to the factory method
+		inputStreamCode   int                    // Input to the factory method
+		inputFunctionCode int                    // Input to the factory method
+		inputWaitBit      int                    // Input to the factory method
+		inputDirection    string                 // Input to the factory method
+		inputItemNode     ItemNode               // Input to the factory method
+		inputFillInValues map[string]interface{} // input to FillVariables()
+		inputSessionID    int                    // Input to SetSessionIDAndSystemBytes()
+		inputSystemBytes  []byte                 // Input to SetSessionIDAndSystemBytes()
+		inputSetWaitBit   bool                   // Input to SetWaitBit()
+		expectedVariables []string               // expected result from Variables()
+		expectedToBytes   []byte                 // expected result from ToBytes()
+		expectedString    string                 // expected result from String()
+	}{{
+		description:       "S99F99 [W] H<->E, Fill in all variables",
+		inputMessageName:  "",
+		inputStreamCode:   99,
+		inputFunctionCode: 99,
+		inputWaitBit:      1,
+		inputDirection:    "H<->E",
+		inputItemNode:     NewListNode(NewIntNode(1, "var1", "var2"), NewBooleanNode("var3")),
+		inputFillInValues: map[string]interface{}{"var1": 0, "var2": -1, "var3": true},
+		inputSessionID:    0x1234,
+		inputSystemBytes:  []byte{0x56, 0x78, 0x9A, 0xBC},
+		inputSetWaitBit:   true,
+		expectedVariables: []string{},
+		expectedToBytes: []byte{
+			0, 0, 0, 19, 0x12, 0x34, 0xE3, 0x63, 0, 0, 0x56, 0x78, 0x9A, 0xBC,
+			0x01, 2, 0x65, 2, 0x00, 0xFF, 37, 1, 1,
+		},
+		expectedString: `S99F99 W H<->E
+<L[2]
+  <I1[2] 0 -1>
+  <BOOLEAN[1] T>
+>
+.`,
+	}}
+	for i, test := range tests {
+		t.Logf("Test #%d: %s", i, test.description)
+		msg := NewDataMessage(
+			test.inputMessageName,
+			test.inputStreamCode,
+			test.inputFunctionCode,
+			test.inputWaitBit,
+			test.inputDirection,
+			test.inputItemNode,
+		)
+		msg = msg.FillVariables(test.inputFillInValues)
+		msg = msg.SetSessionIDAndSystemBytes(test.inputSessionID, test.inputSystemBytes)
+		msg = msg.SetWaitBit(test.inputSetWaitBit)
+		assert.Equal(t, test.expectedVariables, msg.Variables())
+		assert.Equal(t, test.expectedToBytes, msg.ToBytes())
+		assert.Equal(t, test.expectedString, fmt.Sprint(msg))
+		assert.Equal(t, msg.Body().Type(), "list")
+	}
+}

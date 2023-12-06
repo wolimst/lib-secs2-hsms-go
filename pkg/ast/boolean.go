@@ -61,6 +61,14 @@ func (node *BooleanNode) Size() int {
 	return len(node.values)
 }
 
+func (node *BooleanNode) Type() string {
+	return "boolean"
+}
+
+func (node *BooleanNode) Value() []bool {
+	return node.values
+}
+
 // Variables implements ItemNode.Variables().
 func (node *BooleanNode) Variables() []string {
 	return getVariableNames(node.variables)

@@ -50,6 +50,8 @@ type ItemNode interface {
 
 	// ToBytes returns the byte representation of the data item.
 	ToBytes() []byte
+
+	Type() string
 }
 
 // EmptyItemNode is a immutable data type that represents a empty data item node.
@@ -74,6 +76,10 @@ func (node emptyItemNode) Variables() []string {
 // FillVariables implements ItemNode.FillVariables().
 func (node emptyItemNode) FillVariables(values map[string]interface{}) ItemNode {
 	return node
+}
+
+func(nod emptyItemNode) Type() string {
+	return "empty"
 }
 
 // ToBytes implements ItemNode.ToBytes()

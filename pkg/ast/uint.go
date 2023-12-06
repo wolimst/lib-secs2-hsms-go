@@ -82,6 +82,14 @@ func (node *UintNode) Size() int {
 	return len(node.values)
 }
 
+func (node *UintNode) Type() string {
+	return "uint"
+}
+
+func (node *UintNode) Value() []uint64 {
+	return node.values
+}
+
 // Variables implements ItemNode.Variables().
 func (node *UintNode) Variables() []string {
 	return getVariableNames(node.variables)

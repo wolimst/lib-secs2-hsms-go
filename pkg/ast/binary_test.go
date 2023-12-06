@@ -145,3 +145,10 @@ func TestBinaryNode_ProducedByFillVariables(t *testing.T) {
 		assert.Equal(t, test.expectedString, fmt.Sprint(node))
 	}
 }
+
+func TestBinaryTypeAndValue(t *testing.T){
+	node := NewBinaryNode(0x11, 0x32)
+	nd := node.(*BinaryNode)
+	assert.Equal(t, nd.Type(), "binary")
+	assert.Equal(t, nd.Value(), []int{0x11, 0x32})
+}

@@ -89,6 +89,14 @@ func (node *ListNode) Size() int {
 	return len(node.values)
 }
 
+func (node *ListNode) Type() string {
+	return "list"
+}
+
+func (node *ListNode) Value() []ItemNode {
+	return node.values
+}
+
 // Variables implements ItemNode.Variables().
 func (node *ListNode) Variables() []string {
 	result := []string{}
