@@ -1,4 +1,4 @@
-module github.com/wolimst/lib-secs2-hsms-go
+module github.com/GunsonJack/lib-secs2-hsms-go
 
 go 1.16
 
