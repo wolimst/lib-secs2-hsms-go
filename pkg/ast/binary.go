@@ -9,7 +9,7 @@ import (
 // BinaryNode is a immutable data type that represents a binary item in a SECS-II message.
 // Implements ItemNode.
 type BinaryNode struct {
-	values    []int          // Array of binary values between [0, 255], represented as integers
+	values    []uint8          // Array of binary values between [0, 255], represented as integers
 	variables map[string]int // Variable name and its position in the data array
 
 	// Rep invariants
@@ -33,18 +33,18 @@ func NewBinaryNode(values ...interface{}) ItemNode {
 	}
 
 	var (
-		nodeValues    []int          = make([]int, 0, len(values))
+		nodeValues    []uint8          = make([]uint8, 0, len(values))
 		nodeVariables map[string]int = make(map[string]int)
 	)
 	for i, value := range values {
-		if v, ok := value.(int); ok {
+		if v, ok := value.(uint8); ok {
 			// value is a int
 			nodeValues = append(nodeValues, v)
 		} else if v, ok := value.(string); ok {
 			if strings.HasPrefix(v, "0b") {
 				// value is a binary string
 				vAsInt64, _ := strconv.ParseInt(v, 0, 0)
-				nodeValues = append(nodeValues, int(vAsInt64))
+				nodeValues = append(nodeValues, uint8(vAsInt64))
 			} else {
 				// value is a variable
 				if _, ok := nodeVariables[v]; ok {
@@ -143,7 +143,7 @@ func (node *BinaryNode) String() string {
 
 func (node *BinaryNode) checkRep() {
 	for _, v := range node.values {
-		if !(0 <= v && v < 256) {
+		if !(0 <= v && v < 255) {
 			panic("value overflow")
 		}
 	}
