@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/wolimst/lib-secs2-hsms-go/pkg/ast"
+	"github.com/GunsonJack/lib-secs2-hsms-go/pkg/ast"
 )
 
 // Tests HSMS parser
